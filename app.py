@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, Response
 import requests
 from utils.innertube import innertube_search, innertube_trending, innertube_browse, innertube_comments
 from utils.streamer import GetVideo, extract_video_id
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 streamer = GetVideo()
@@ -85,6 +86,11 @@ def proxy_stream():
     video_url = request.args.get("video_url")
     if not video_url:
         return "Missing url", 400
+
+    parsed = urlparse(video_url)
+    host = parsed.netloc.lower()
+    if not (host == "googlevideo.com" or host.endswith(".googlevideo.com")):
+        return "Forbidden", 403
 
     upstream = requests.get(video_url, stream=True)
     if upstream.status_code != 200:
