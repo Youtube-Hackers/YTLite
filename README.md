@@ -1,2 +1,2 @@
 # YTLite
-A custom Frontend for YouTube
+A simple custom Frontend for YouTube
