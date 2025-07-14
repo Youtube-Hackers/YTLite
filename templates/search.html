@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}Search Results for {{ query }}{% endblock %}
+{% block content %}
+<h2 class="text-xl mb-4">Search Results for {{ query }}</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+  {% for v in videos %}
+  <div class="bg-white rounded shadow overflow-hidden relative">
+    <a href="{{ url_for('watch', v=v.videoId) }}">
+      <img src="{{ url_for('proxy_thumbnail', video_id=v.videoId) }}" alt="{{ v.title }}" class="w-full"/>
+      {% if v.lengthText %}
+      <div class="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-1 py-0.5 rounded">
+        {{ v.lengthText.simpleText }}
+      </div>
+      {% endif %}
+    </a>
+    <div class="p-2">
+      <a href="{{ url_for('watch', v=v.videoId) }}" class="font-semibold">{{ v.title }}</a>
+      <p class="text-sm text-gray-600">
+        <a href="{{ url_for('channel', channel_id=v.authorId) }}">{{ v.author }}</a>
+      </p>
+      <p class="text-sm text-gray-600">{{ v.viewCountText }} • {{ v.publishedText }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
